@@ -12,7 +12,21 @@ html,body {width: 100%;height: 100%;margin: 0;padding: 0;}
 </style>
 <script>
 	var state=-1;
+	var count=22;
+	var nyas=Array();
+	var now=0;
 	function init(){
+		var list=Array();
+		for(i=0;i<count;i++)list.push("nyas/nya"+i+".mp3");
+		for(i=0;i<count;i++){
+			var nya=new Audio();
+			nya.preload=true;
+			nya.controls=true; 
+			nya.src=list[i];
+			nya.loop=false;
+			nya.addEventListener('ended', nyaover, false);
+			nyas.push(nya);
+		}
 		state=0;
 		e=document.getElementById('neko');
 		e.src='nya'+state+'.png';
@@ -22,12 +36,21 @@ html,body {width: 100%;height: 100%;margin: 0;padding: 0;}
 		state=1;
 		e=document.getElementById('neko');
 		e.src='nya'+state+'.png';
+		now=Math.floor(Math.random()*count);
+		nyas[now].play();
+	}
+	function nyaover(){
+		state=2;
+		e=document.getElementById('neko');
+		e.src='nya'+state+'.png';
 	}
 	function mouseup(){
 		if(state==-1)return;
 		state=0;
 		e=document.getElementById('neko');
 		e.src='nya'+state+'.png';
+		nyas[now].pause();
+		nyas[now].currentTime=0;
 	}
 </script>
 <body onload="init()">
